@@ -16,47 +16,47 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.util.Log;
 
 /**
  * Data model for the set of search results.
  */
 class SearchResults {
-	private final HttpClient httpClient = new DefaultHttpClient(new BasicHttpParams());
-	
-	private String queryString;
-	private int size;
-	private HashMap<Integer,SearchResult> sparseResults;
+	private final String queryString;
+	private final int size;
+	private final HashMap<Integer,SearchResult> sparseResults;
 
-	/*
-	SearchResults() {
-		this.queryString = "";
-		this.size = 0;
+	SearchResults(String queryString) throws IOException, JSONException {
+		Log.e(PicSearch.TAG, "Constructing new SearchResults: '" + queryString + "'");
+		this.queryString = queryString;
+		Assert.assertNotNull(queryString);
+		if (!queryString.equals("")) {
+			JSONObject resultSet = query(1, 1);
+			this.size = resultSet.getInt("totalResultsAvailable");
+			try {
+				Log.e(PicSearch.TAG, "Sleeping to debug...");
+		        Thread.sleep(2000);
+	        } catch (InterruptedException e) {
+		        throw new RuntimeException(e);
+	        }
+		} else {
+			this.size = 0;
+		}
 		this.sparseResults = new HashMap<Integer,SearchResult>();
 	}
-	*/
 
-	SearchResults(String pQuery) throws IOException, JSONException {
-		setQueryString(pQuery);
-	}
-
-	void setQueryString(String queryString) throws IOException, JSONException {
-		this.queryString = queryString;
-		JSONObject resultSet = query(1, 1);
-		this.size = resultSet.getInt("totalResultsAvailable");
-		this.sparseResults = new HashMap<Integer,SearchResult>();		
-	}
-
-	private JSONObject query(int start, int results)
+	public JSONObject query(int start, int results)
 	        throws IOException, JSONException {
 		HttpUriRequest request = new HttpGet(
 		        "http://search.yahooapis.com/ImageSearchService/V1/imageSearch?"
 		                + "appid=1_SUjbrV34FfJ6lA6mSNZtxWNu1KsEhhGqaPC6ZI4nPZIdzNG7lwYUKuS1ZX.rbz__gILTQ"
 		                + "&query=" + URLEncoder.encode(this.queryString) + "&output=" + "json"
 		                + "&start=" + start + "&results=" + results);
-		HttpResponse response = this.httpClient.execute(request);
+		HttpClient httpClient = new DefaultHttpClient(new BasicHttpParams());
+		HttpResponse response = httpClient.execute(request);
 		HttpEntity entity = response.getEntity();
 		InputStream content = entity.getContent();
 		String contentString = toString(content);
@@ -73,14 +73,11 @@ class SearchResults {
 		return this.size;
 	}
 
-	SearchResult get(int i) throws JSONException, IOException {
+	SearchResult get(int i) {
 		SearchResult result = this.sparseResults.get(Integer.valueOf(i));
 		if (result == null)
 		{
-			JSONObject resultSet = query(i + 1, 1);
-			JSONArray results = resultSet.getJSONArray("Result");
-			Assert.assertEquals(1, results.length());
-			result = new SearchResult(results.getJSONObject(0));
+			result = new SearchResult(Integer.valueOf(i));
 			this.sparseResults.put(Integer.valueOf(i), result);
 		}
 		return result;
