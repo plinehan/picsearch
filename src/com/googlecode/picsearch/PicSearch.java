@@ -86,17 +86,17 @@ public class PicSearch extends ListActivity {
     }
     
     private void setListAdapter(final String queryString) {
-		Log.e(TAG, "Showing 'searching' dailog.");
+		Log.i(TAG, "Showing 'searching' dailog.");
 		showDialog(DIALOG_ID_SEARCHING);
-		Log.e(TAG, "Showed 'search' dialog.");
+		Log.i(TAG, "Showed 'search' dialog.");
 
-		Log.e(TAG, "Calling async...");
+		Log.i(TAG, "Calling async...");
 		async(new Callable<Runnable>() {
 			public Runnable call() throws Exception {
 				final SearchListAdapter newListAdapter = new SearchListAdapter(PicSearch.this, new SearchResults(queryString));
 				return new Runnable() {
 					public void run() {
-						Log.e(TAG, "Running local callback stuff");
+						Log.i(TAG, "Running local callback stuff");
 						//PicSearch.this.listAdapter = newListAdapter;
 						setListAdapter(newListAdapter);
 						getListView().setOnItemClickListener(getOnClickListener());						
@@ -105,7 +105,7 @@ public class PicSearch extends ListActivity {
 				};
 			}
 		});
-		Log.e(TAG, "Async called.");
+		Log.i(TAG, "Async called.");
     }
     
 	@Override
@@ -239,9 +239,9 @@ public class PicSearch extends ListActivity {
 
     @Override
     public boolean onSearchRequested() {
-    	Log.e(TAG, "startSearch:in");
+    	Log.i(TAG, "startSearch:in");
         startSearch(null, false, null, false); 
-    	Log.e(TAG, "startSearch:out");
+    	Log.i(TAG, "startSearch:out");
 
         return true;
     }
@@ -325,11 +325,11 @@ public class PicSearch extends ListActivity {
 		
 		public void run() {
 			try {
-				Log.e(TAG, "About to call async callable.");
+				Log.i(TAG, "About to call async callable.");
 		        Runnable runnable = this.task.call();
-		        Log.e(TAG, "Posting sync runnable");
+		        Log.i(TAG, "Posting sync runnable");
 		        PicSearch.this.mainHandler.post(runnable);
-		        Log.e(TAG, "Posted sync runnable");
+		        Log.i(TAG, "Posted sync runnable");
 	        } catch (Exception e) {
 	        	//this.handler.post(new ShowDialogRunnable(DIALOG_ID_ERROR));
 	        	//this.mostRecentException = e;
@@ -439,7 +439,7 @@ public class PicSearch extends ListActivity {
 		}
 
         private void updateBitmap(Bitmap bitmap) {
-			Log.e(TAG, "setting image view");
+			Log.i(TAG, "setting image view");
 			PicSearch.SearchResultView.this.imageView = new ImageView(PicSearch.this);
 			PicSearch.SearchResultView.this.imageView.setImageBitmap(bitmap);
 			PicSearch.SearchResultView.this.imageView.setAdjustViewBounds(true);
@@ -460,7 +460,7 @@ public class PicSearch extends ListActivity {
 	        	String thumbnailUrl = fetchThumbnailUrl(searchResults);
 	        	bitmap = fetchImageBitmap(thumbnailUrl);
 			} else {
-				Log.e(TAG, "cached bitmap");
+				Log.i(TAG, "cached bitmap");
 			}
 			sBitmaps.put(this.searchResult.resultIndex, bitmap);
 			return bitmap;
@@ -477,7 +477,7 @@ public class PicSearch extends ListActivity {
         }
         
         private Bitmap fetchImageBitmap(String urlString) throws IOException {
-        	Log.e(TAG, "fetching bitmap: " + urlString);
+        	Log.i(TAG, "fetching bitmap: " + urlString);
 			URL url = new URL(urlString);
 			URLConnection connection = url.openConnection();
 			connection.connect();
@@ -486,7 +486,7 @@ public class PicSearch extends ListActivity {
 			Bitmap bitmap = BitmapFactory.decodeStream(bis);
 			bis.close();
 			inputStream.close();
-			Log.e(TAG, "fetched bitmap: " + urlString);
+			Log.i(TAG, "fetched bitmap: " + urlString);
 			return bitmap;
 		}
         
