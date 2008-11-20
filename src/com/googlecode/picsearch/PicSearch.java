@@ -29,19 +29,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PicSearch extends ListActivity {
 	public static final String TAG = "PicSearch";
+	
+    private static final int MENU_ITEM_SEARCH = 10000;
+    private static final int MENU_ITEM_ABOUT = 10001;
 	
 	private static final int DIALOG_ID_SEARCHING = 100;
 	private static final int DIALOG_ID_ERROR = 101;
@@ -105,7 +113,10 @@ public class PicSearch extends ListActivity {
 		switch (id) {
 		case DIALOG_ID_SEARCHING:
 			ProgressDialog dialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+			dialog.setTitle("hello");
 			dialog.setMessage("Searching...");
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(true);
 			return dialog;
 		case DIALOG_ID_ERROR:
 			return new AlertDialog.Builder(this).setTitle(
@@ -122,6 +133,62 @@ public class PicSearch extends ListActivity {
 		}
 	}
     
+    /**
+     * Adds some basic menu items. The order is Menu.CATEGORY_SECONDARY so
+     * additional items can be placed before these items.
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        super.onCreateOptionsMenu(menu);
+
+        MenuItem menuItem = null;
+        SubMenu subMenu = null;
+
+        menuItem =
+                        menu.add(
+                                        Menu.NONE,
+                                        MENU_ITEM_SEARCH,
+                                        Menu.CATEGORY_SECONDARY,
+                                        "Search");
+        menuItem.setAlphabeticShortcut('s');
+        menuItem.setIcon(android.R.drawable.ic_menu_search);
+
+        subMenu =
+                        menu.addSubMenu(
+                                        Menu.NONE,
+                                        MENU_ITEM_ABOUT,
+                                        Menu.CATEGORY_SECONDARY,
+                                        "About");
+        menuItem.setAlphabeticShortcut('a');
+        subMenu.setIcon(android.R.drawable.ic_menu_info_details);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case MENU_ITEM_SEARCH:
+            	Toast.makeText(this, "Search!", Toast.LENGTH_LONG);
+                return true;
+
+            case MENU_ITEM_ABOUT:
+                this.showDialog(DIALOG_ID_ABOUT);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        return super.onPrepareOptionsMenu(menu);
+    }
+	
 	private static String toString(Throwable throwable) {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		throwable.printStackTrace(new PrintStream(bytes));
@@ -164,9 +231,8 @@ public class PicSearch extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				//SearchResultView myView = (SearchResultView)view;
-				showDialog(DIALOG_ID_ABOUT);
-				//Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(myView.searchResult.clickUrl));
-				//startActivity(intent);
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com/"));//myView.searchResult.clickUrl));
+				startActivity(intent);
 			}
 		};
 	}
