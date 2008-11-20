@@ -113,7 +113,7 @@ public class PicSearch extends ListActivity {
 		switch (id) {
 		case DIALOG_ID_SEARCHING:
 			ProgressDialog dialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
-			dialog.setTitle("hello");
+			dialog.setTitle(R.string.app_name);
 			dialog.setMessage("Searching...");
 			dialog.setIndeterminate(true);
 			dialog.setCancelable(true);
@@ -392,7 +392,7 @@ public class PicSearch extends ListActivity {
         //private TextView textView;
         private ImageView imageView;
         
-        public SearchResultView(final Context context, SearchResult searchResult, final SearchResults searchResults) {
+        public SearchResultView(final Context context, final SearchResult searchResult, final SearchResults searchResults) {
 			super(context);
 			this.searchResult = searchResult;
 			this.imageView = new ImageView(context);
@@ -407,24 +407,17 @@ public class PicSearch extends ListActivity {
 			super.forceLayout();
 			super.invalidate();
 			
+			Bitmap bitmap = sBitmaps.get(this.searchResult.resultIndex);
+			if (bitmap != null) {
+				updateBitmap(bitmap);
+			}
+			
 			PicSearch.this.async(new Callable<Runnable>() {
 				public Runnable call() throws Exception {
-					final Bitmap bitmap = fetchThumbnailBitmap(searchResults);
+					final Bitmap asyncBitmap = fetchThumbnailBitmap(searchResults);
 					return new Runnable() {
 						public void run() {
-							Log.e(TAG, "setting image view");
-							PicSearch.SearchResultView.this.imageView = new ImageView(context);
-							PicSearch.SearchResultView.this.imageView.setImageBitmap(bitmap);
-							PicSearch.SearchResultView.this.imageView.setAdjustViewBounds(true);
-							removeAllViews();
-							addView(PicSearch.SearchResultView.this.imageView, new LinearLayout.LayoutParams(
-							        LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-	
-							// todo: are the next two lines required?
-							PicSearch.SearchResultView.this.imageView.invalidate();
-							PicSearch.SearchResultView.this.imageView.forceLayout();
-							PicSearch.SearchResultView.super.forceLayout();
-							PicSearch.SearchResultView.super.invalidate();
+							updateBitmap(asyncBitmap);
 						}
 					};
 				}
@@ -445,7 +438,23 @@ public class PicSearch extends ListActivity {
 			*/
 		}
 
-        private Bitmap fetchThumbnailBitmap(SearchResults searchResults) throws IOException, JSONException {
+        private void updateBitmap(Bitmap bitmap) {
+			Log.e(TAG, "setting image view");
+			PicSearch.SearchResultView.this.imageView = new ImageView(PicSearch.this);
+			PicSearch.SearchResultView.this.imageView.setImageBitmap(bitmap);
+			PicSearch.SearchResultView.this.imageView.setAdjustViewBounds(true);
+			removeAllViews();
+			addView(PicSearch.SearchResultView.this.imageView, new LinearLayout.LayoutParams(
+			        LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+
+			// todo: are the next two lines required?
+			PicSearch.SearchResultView.this.imageView.invalidate();
+			PicSearch.SearchResultView.this.imageView.forceLayout();
+			PicSearch.SearchResultView.super.forceLayout();
+			PicSearch.SearchResultView.super.invalidate();
+        }
+
+		private Bitmap fetchThumbnailBitmap(SearchResults searchResults) throws IOException, JSONException {
         	Bitmap bitmap = sBitmaps.get(this.searchResult.resultIndex);
         	if (bitmap == null) {
 	        	String thumbnailUrl = fetchThumbnailUrl(searchResults);
