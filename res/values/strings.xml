@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PicSearch</string>
-    <string name="search_hint">Search here</string>
+    
     <string name="search_label">PicSearch</string>
+    <string name="search_hint">Search here</string>
+
+    <string name="error_dialog_title">Error</string>
+    <string name="error_dialog_message">Network error.  Try again later.</string>
+    <string name="error_dialog_dismiss">OK</string>
 </resources>
