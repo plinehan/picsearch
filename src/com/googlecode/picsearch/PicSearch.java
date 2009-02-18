@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -383,7 +385,14 @@ public class PicSearch extends ListActivity {
 	}
 	*/
 	
-	private static final Map<Integer,Bitmap> sBitmaps = new ConcurrentHashMap<Integer,Bitmap>();
+	private static final Map<Integer,Bitmap> sBitmaps = 
+		Collections.synchronizedMap(new LinkedHashMap<Integer,Bitmap>() {
+			@Override
+			protected boolean removeEldestEntry(Map.Entry<Integer,Bitmap> eldest)
+			{
+				return size() > 100;
+			}
+		});
 	
     private class SearchResultView extends LinearLayout {
     	private SearchResult searchResult;
