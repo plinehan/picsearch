@@ -6,12 +6,14 @@
     <string name="search_label">PicSearch</string>
     <string name="search_hint">Search here</string>
 
+    <string name="searching_dialog_message">"Searching...</string>
+
     <string name="error_dialog_title">Error</string>
     <string name="error_dialog_message">Network error.  Try again later.</string>
     <string name="error_dialog_dismiss">OK</string>
 
     <string name="about_dialog_title">About PicSearch</string>
-    <string name="about_dialog_message">Copyright (C) 2008\nPatrick F. Linehan\n\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.\n\nThe &quot;search&quot; icon is borrowed from the Nuvola icon set by David Vignoni.  It is licensed under the LGPL.  See here for more details: http://www.icon-king.com/?p=15</string>
+    <string name="about_dialog_message">Copyright (C) 2008\nPatrick F. Linehan\n\nThis program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nThis program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/.\n\nThe &quot;search&quot; icon is borrowed from the Nuvola icon set by David Vignoni.  It is licensed under the LGPL.  See here for more details: http://www.icon-king.com/?p=15\n</string>
     <string name="about_dialog_dismiss">OK</string>
 
 </resources>

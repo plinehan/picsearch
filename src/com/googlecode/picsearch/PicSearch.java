@@ -29,6 +29,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -116,7 +117,7 @@ public class PicSearch extends ListActivity {
 		case DIALOG_ID_SEARCHING:
 			ProgressDialog dialog = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
 			dialog.setTitle(R.string.app_name);
-			dialog.setMessage("Searching...");
+			dialog.setMessage(getResources().getString(R.string.searching_dialog_message));
 			dialog.setIndeterminate(true);
 			dialog.setCancelable(true);
 			return dialog;
