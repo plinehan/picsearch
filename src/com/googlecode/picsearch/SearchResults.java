@@ -38,7 +38,7 @@ class SearchResults {
 			this.size = resultSet.getInt("totalResultsAvailable");
 			try {
 				Log.e(PicSearch.TAG, "Sleeping to debug...");
-		        Thread.sleep(2000);
+		        Thread.sleep(1000);
 	        } catch (InterruptedException e) {
 		        throw new RuntimeException(e);
 	        }
@@ -58,9 +58,7 @@ class SearchResults {
 		HttpClient httpClient = new DefaultHttpClient(new BasicHttpParams());
 		HttpResponse response = httpClient.execute(request);
 		HttpEntity entity = response.getEntity();
-		InputStream content = entity.getContent();
-		String contentString = toString(content);
-		content.close();
+		String contentString = contentToString(entity);
 		JSONObject rootJsonObject = new JSONObject(contentString).getJSONObject("ResultSet");
 		//Assert.assertEquals(start, rootJsonObject.getInt("firstResultPosition"));
 		// todo: this fails if there are zero results.
@@ -83,15 +81,17 @@ class SearchResults {
 		return result;
 	}
 
-	static String toString(InputStream inputStream) throws IOException {
-		// todo: what is the correct charset?
-		// todo: what is the correct buffer size?
+	static String contentToString(HttpEntity entity) throws IOException {
+		// todo: bother with correct charset?
+		// todo: bother with correct buffer size?
+		InputStream content = entity.getContent();
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		BufferedInputStream bufferedStream = new BufferedInputStream(
-		        inputStream);
+		        content);
 		for (int currByte; (currByte = bufferedStream.read()) != -1;) {
 			bytes.write(currByte);
 		}
+		content.close();
 		return bytes.toString();
 	}
 }
