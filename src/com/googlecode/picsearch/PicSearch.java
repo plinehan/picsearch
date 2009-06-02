@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,7 +28,6 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -230,7 +228,6 @@ public class PicSearch extends ListActivity {
     private OnItemClickListener getOnClickListener() {
 		return new OnItemClickListener()
 		{
-			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
 				//SearchResultView myView = (SearchResultView)view;
@@ -294,7 +291,6 @@ public class PicSearch extends ListActivity {
 			this.id = id;
 		}
 
-		@Override
         public void run() {
 			this.activity.dismissDialog(this.id);
         }
@@ -309,7 +305,6 @@ public class PicSearch extends ListActivity {
 			this.id = id;
 		}
 
-		@Override
         public void run() {
 			this.activity.showDialog(this.id);
         }
